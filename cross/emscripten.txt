@@ -1,0 +1,45 @@
+[binaries]
+c = 'emcc'
+cpp = 'em++'
+ar = 'emar'
+strip = 'emstrip'
+
+pkg-config = ['emconfigure', 'pkg-config']
+
+# Also a bit of a hack these two. Maybe Meson could
+# figure these out on its own.
+cmake = ['emmake', 'cmake']
+sdl2-config = ['emconfigure', 'sdl2-config']
+
+# This runs non-GUI tests just fine. And Emscripten
+# even comes with a node.js install, so maybe this
+# could even be the default...?
+exe_wrapper = 'node'
+
+[properties]
+needs_exe_wrapper = true
+shared_lib_suffix = 'js'
+static_lib_suffix = 'js'
+shared_module_suffix = 'js'
+executable_suffix = 'html'
+common_args = []
+linker_args = []
+skip_sanity_check = true
+
+[host_machine]
+system = 'emscripten'
+cpu_family = 'wasm32'
+cpu = 'wasm32'
+endian = 'little'
+
+[built-in options]
+#needs flto on to not screw up png support
+c_args = ['--use-port=sdl2_image:formats=bmp,png', '--use-port=sdl2', '--use-port=sdl2_ttf', '--use-port=sdl2_gfx', '--use-port=freetype', '-fexceptions', '-O3', '-flto=full', '-DSDL_MIXER_X']
+c_link_args = ['-sEXPORT_ALL=1', '--use-port=sdl2_image:formats=bmp,png', '--use-port=sdl2', '--use-port=sdl2_ttf', '--use-port=sdl2_gfx', '-sINITIAL_MEMORY=512MB', '-sALLOW_MEMORY_GROWTH=1', '-sCASE_INSENSITIVE_FS=1', '-sFORCE_FILESYSTEM=1', '-fexceptions', '-sWASM_BIGINT', '-sSTB_IMAGE=1', '-flto=full', '-DSDL_MIXER_X', '-sLZ4=1', '--use-port=bzip2', '--use-port=zlib', '-sEXPORTED_RUNTIME_METHODS="ccall", "cwrap", "UTF8ToString", "getValue"', '-sEXPORTED_FUNCTIONS="_main", "_malloc", "_free", "_emDmodExtract", "_emSavegamesImport", "_emSavegamesExport"', '-sERROR_ON_UNDEFINED_SYMBOLS=0', '-Wno-undefined', '--pre-js=@GLOBAL_SOURCE_ROOT@/emscripten/pre.js', '--shell-file=@GLOBAL_SOURCE_ROOT@/emscripten/shell.html', '-lidbfs.js']
+cpp_args = ['--use-port=sdl2_image:formats=bmp,png', '--use-port=sdl2', '--use-port=sdl2_ttf', '--use-port=sdl2_gfx', '--use-port=freetype', '-Wno-write-strings', '-fexceptions', '-O3', '-flto=full', '-DSDL_MIXER_X']
+cpp_link_args = ['-sEXPORT_ALL=1', '--use-port=sdl2_image:formats=bmp,png', '--use-port=sdl2', '--use-port=sdl2_ttf', '--use-port=sdl2_gfx', '-sINITIAL_MEMORY=512MB', '-sALLOW_MEMORY_GROWTH=1', '-sCASE_INSENSITIVE_FS=1', '-sFORCE_FILESYSTEM=1', '-fexceptions', '-sWASM_BIGINT', '-sSTB_IMAGE=1', '-flto=full', '-DSDL_MIXER_X', '-sLZ4=1', '--use-port=bzip2', '--use-port=zlib', '-sEXPORTED_RUNTIME_METHODS="ccall", "cwrap", "UTF8ToString", "getValue"', '-sEXPORTED_FUNCTIONS="_main", "_malloc", "_free", "_emDmodExtract", "_emSavegamesImport", "_emSavegamesExport"', '-sERROR_ON_UNDEFINED_SYMBOLS=0', '-Wno-undefined', '--pre-js=@GLOBAL_SOURCE_ROOT@/emscripten/pre.js', '--shell-file=@GLOBAL_SOURCE_ROOT@/emscripten/shell.html', '-lidbfs.js']
+
+default_library = 'static'
+
+# use preload-cache for timidity pats
+# mixerx compiled with emcmake cmake -DCMAKE_BUILD_TYPE=Release -DMIXERX_ENABLE_GPL=ON -DUSE_DRFLAC=OFF -DUSE_MP3_DRMP3=OFF -DUSE_MP3_MPG123=ON -DUSE_OGG_VORBIS_STB=OFF -DUSE_OGG_VORBIS=ON ..
