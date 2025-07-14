@@ -1,0 +1,1 @@
+soloud/soloud_sdl2_dll.o: soloud/soloud_sdl2_dll.c
