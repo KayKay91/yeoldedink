@@ -1,3 +1,6 @@
+This is a mirror of YeOldeDink source code which is found only in its itch.io page https://branleur.itch.io/yeoldedink
+-
+
 Introduction
 ============
 
